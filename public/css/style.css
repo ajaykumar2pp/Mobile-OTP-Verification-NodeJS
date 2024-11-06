@@ -10,7 +10,7 @@ body {
 
 .container-fluid {
     max-width: 600px;
-    background-color: #fff;
+    background-color: #ffffff;
     padding: 2rem;
     border-radius: 12px;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
@@ -33,7 +33,7 @@ body {
 
 
 hr {
-    border-top: 1px solid #e0e0e0;
+    border-top: 3px solid #918d8d;
 }
 
 /* Input Box */
@@ -71,17 +71,33 @@ hr {
 }
 
 /* Disabled verify OTP button  */
-#otp-verify-btn:disabled {
+#verify-otp-btn:disabled {
     background-color: #b5b1b1;
     border-color: #b5b1b1;
     cursor: not-allowed;
 }
 
 /* Enabled verify OTp button  */
-#otp-verify-btn:not(:disabled) {
+#verify-otp-btn:not(:disabled) {
     background: linear-gradient(to right, #2196F3, #64B5F6);
     border-color: #2196F3;
     cursor: pointer;
+}
+
+/* OTP resend timer */
+#otp-resend-timer{
+    font-size: 12px;
+    text-align: end;
+    color: red;
+    margin-bottom: 15px;
+    display: block;
+}
+
+/* Resend OTP timer */
+#resend-otp-btn{
+    font-size: 12px;
+    text-align: end;
+    margin-bottom: 15px;
 }
 
 

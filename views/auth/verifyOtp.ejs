@@ -45,11 +45,21 @@
 
                         <div id="otp-error" class="text-danger mt-2" style="display: none;">
                             <i class="bi bi-exclamation-circle me-2"></i>
-                            Please enter a valid OTP 
+                            Please enter a valid OTP
                         </div>
                     </div>
 
-                    <button type="submit" id="verify-otp-btn" class="btn btn-primary mb-3 " disabled>Verify OTP</button>
+                    <hr>
+                    <div>
+                        <span id="otp-resend-timer"></span>
+                        <button type="button" id="resend-otp-btn" class="btn btn-sm btn-secondary fw-bold float-end" style="display: none;"
+                        onclick="resendOtp()">Resend OTP</button>
+                    </div>
+
+                    <button type="submit" id="verify-otp-btn" class="btn btn-primary mb-3 fw-bold text-white"
+                        disabled>Verify OTP</button>
+
+
                 </form>
 
     </div>
@@ -63,6 +73,9 @@
         const otpInput = document.getElementById('otp');
         const submitOTP = document.getElementById('verify-otp-btn');
         const otpError = document.getElementById('otp-error');
+        const otpResendTimer = document.getElementById('otp-resend-timer');
+        const resendOtpButton = document.getElementById('resend-otp-btn');
+        let countdown = 60;
 
         // Add event listener to OTP verify input
         otpInput.addEventListener('input', (event) => {
@@ -75,13 +88,53 @@
                 otpError.style.display = 'none';
             } else {
                 submitOTP.disabled = true;
-                otpError.style.display = 'block'; 
+                otpError.style.display = 'block';
             }
 
             // Update the OTP input field with only numeric characters
             event.target.value = otpValue;
 
         });
+
+
+        // setInterval countdown
+        const interval = setInterval(() => {
+            countdown--;
+            otpResendTimer.textContent = `Resend OTP in: ${countdown} seconds`;
+
+            // When countdown reaches 0, show "Resend OTP" button and stop timer
+            if (countdown <= 0) {
+                clearInterval(interval);
+                otpResendTimer.style.display = 'none'; // Hide the timer text
+                resendOtpButton.style.display = 'block'; // Show the resend button
+            }
+        }, 1000);
+
+
+        // Function to handle "Resend OTP" button click
+        function resendOtp() {
+         
+            alert('OTP has been resent!');
+
+            // Optionally, restart the countdown if needed
+            countdown = 60;
+            otpResendTimer.style.display = 'block';
+            resendOtpButton.style.display = 'none';
+            otpResendTimer.textContent = `Resend OTP in: ${countdown} seconds`;
+
+            // Restart the timer
+            setInterval(() => {
+                countdown--;
+                otpResendTimer.textContent = `Resend OTP in: ${countdown} seconds`;
+
+                if (countdown <= 0) {
+                    clearInterval(interval);
+                    otpResendTimer.style.display = 'none';
+                    resendOtpButton.style.display = 'inline-block';
+                }
+            }, 1000);
+        }
+
     </script>
 
 </body>
