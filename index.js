@@ -1,12 +1,25 @@
 require('dotenv').config()
 const express = require('express');
 const path = require('path');
+const session = require('express-session');
+const flash = require('express-flash');
 const dbConfig = require('./src/config/db.config');
 const userRoutes = require('./src/routes/userRoutes');
 
 
 // Initialize Express app
 const app = express();
+
+//***************** Session config   ******************//
+app.use(session({
+    secret:  process.env.SECRET_KEY,
+    resave: false,
+    saveUninitialized: true,
+}))
+
+
+//***************** Express Flash  ******************//
+app.use(flash())
 
 
 // ********  serve the static file from the 'public' directory *********//

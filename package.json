@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start":"nodemon index.js -e js, ejs"
+    "start": "nodemon index.js -e js, ejs"
   },
   "keywords": [],
   "author": "Ajay Kumar",
@@ -14,6 +14,8 @@
     "dotenv": "^16.4.5",
     "ejs": "^3.1.10",
     "express": "^4.21.1",
+    "express-flash": "^0.0.2",
+    "express-session": "^1.18.1",
     "mongoose": "^8.8.0"
   }
 }

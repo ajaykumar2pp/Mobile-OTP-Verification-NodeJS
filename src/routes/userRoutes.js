@@ -9,4 +9,7 @@ router.get('/sendOtp', userController.sendOtpPage);
 // Verify OTP Page GET Route
 router.get('/verifyOtp', userController.verifyOtpPage);
 
+// Verify OTP Page POST Route
+router.post('/sendOtp', userController.sendOtp);
+
 module.exports = router;
