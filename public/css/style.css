@@ -50,14 +50,14 @@ hr {
 }
 
 
-/* Disabled button styles */
+/* Disabled Send OTP button  */
 #submit-btn:disabled {
     background-color: #b5b1b1;
     border-color: #b5b1b1;
     cursor: not-allowed;
 }
 
-/* Enabled button styles */
+/* Enabled Send OTP button  */
 #submit-btn:not(:disabled) {
     background: linear-gradient(to right, #2196F3, #64B5F6);
     border-color: #2196F3;
@@ -68,6 +68,20 @@ hr {
     background-color: #ccc;
     border-color: #ccc;
     pointer-events: none;
+}
+
+/* Disabled verify OTP button  */
+#otp-verify-btn:disabled {
+    background-color: #b5b1b1;
+    border-color: #b5b1b1;
+    cursor: not-allowed;
+}
+
+/* Enabled verify OTp button  */
+#otp-verify-btn:not(:disabled) {
+    background: linear-gradient(to right, #2196F3, #64B5F6);
+    border-color: #2196F3;
+    cursor: pointer;
 }
 
 

@@ -73,12 +73,24 @@ exports.sendOtp = async (req, res) => {
 exports.verifyOtp = async (req, res) => {
     console.log(req.body)
     const { phone, otp } = req.body;
-    
+
     try {
         const user = await User.findOne({ phone });
-        if (!user) return res.status(404).json({ message: 'User not found' });
-        if (user.otp !== otp) return res.status(400).json({ message: 'Invalid OTP' });
-        if (user.otpExpires < Date.now()) return res.status(400).json({ message: 'OTP expired' });
+        
+        if (!user) {
+            req.flash('error', 'User not found');
+            return res.redirect('/verify-otp'); 
+        }
+
+        if (user.otp !== otp) {
+            req.flash('error', 'Invalid OTP');
+            return res.redirect('/verify-otp');
+        }
+        
+        if (user.otpExpires < Date.now()) {
+            req.flash('error', 'OTP expired');
+            return res.redirect('/verify-otp');
+        }
 
         user.otp = null;
         user.otpExpires = null;
@@ -88,7 +100,9 @@ exports.verifyOtp = async (req, res) => {
         return res.redirect('/dashboard');
         // res.status(200).json({ message: 'OTP verified successfully' });
     } catch (error) {
-        res.status(500).json({ message: 'Verification failed', error });
+        req.flash('error', 'Verification failed. Please try again.');
+        return res.redirect('/verify-otp');
+        // res.status(500).json({ message: 'Verification failed', error });
     }
 
 }
