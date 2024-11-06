@@ -8,11 +8,9 @@ const userSchema = new Schema({
         type: String,
         required: true,
         unique: true,
-        match: [/^\d{10}$/, 'Phone number must be exactly 10 digits']
     },
     otp: {
-        type: String,
-        required: true
+        type: String
     },
     otpExpires: Date,
 

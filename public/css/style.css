@@ -37,14 +37,15 @@ hr {
 }
 
 /* Input Box */
-.custom-input{
+.custom-input {
     border: 2px solid #ccc;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 /* Input Box Hover Effect */
 .custom-input:focus {
-     /* border-color: #28a745; */
-     box-shadow: 0 0 5px rgba(166, 152, 245, 0.5); 
+    /* border-color: #b5b1b1; */
+    box-shadow: 0 0 5px rgba(166, 152, 245, 0.5);
     outline: none;
 }
 
@@ -58,9 +59,15 @@ hr {
 
 /* Enabled button styles */
 #submit-btn:not(:disabled) {
-    background: linear-gradient(to right, #2196F3, #64B5F6); 
-    border-color: #2196F3; 
+    background: linear-gradient(to right, #2196F3, #64B5F6);
+    border-color: #2196F3;
     cursor: pointer;
+}
+
+.custom-input1 {
+    background-color: #ccc;
+    border-color: #ccc;
+    pointer-events: none;
 }
 
 

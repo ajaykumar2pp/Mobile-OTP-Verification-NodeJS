@@ -15,7 +15,16 @@ app.use(session({
     secret:  process.env.SECRET_KEY,
     resave: false,
     saveUninitialized: true,
+    cookie: { maxAge: 24 * 60 * 60 * 1000 }
 }))
+
+//  *********************   Global Middleware ***********************//
+app.use((req, res, next) => {
+
+    res.locals.session = req.session
+    // console.log(req.session)
+    next();
+})
 
 
 //***************** Express Flash  ******************//
@@ -39,7 +48,7 @@ dbConfig.connectMongoDB();
 
 // ********  Route Setup ***********//
 app.get('/', (req, res) => {
-    res.redirect('/sendOtp');
+    res.redirect('/send-otp');
 });
 
 app.use('/', userRoutes);
