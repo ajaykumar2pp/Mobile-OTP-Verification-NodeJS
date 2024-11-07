@@ -15,6 +15,9 @@ router.post('/send-otp', userController.sendOtp);
 // Verify OTP Page POST Route
 router.post('/verify-otp', userController.verifyOtp);
 
+// Resend OTP POST Route
+router.post('/resend-otp', userController.resendOtp);
+
 // Dashboard GET Route
 router.get('/dashboard', userController.dashboardPage);
 

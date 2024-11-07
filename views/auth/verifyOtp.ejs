@@ -52,8 +52,8 @@
                     <hr>
                     <div>
                         <span id="otp-resend-timer"></span>
-                        <button type="button" id="resend-otp-btn" class="btn btn-sm btn-secondary fw-bold float-end" style="display: none;"
-                        onclick="resendOtp()">Resend OTP</button>
+                        <button type="button" id="resend-otp-btn" class="btn btn-sm btn-secondary fw-bold float-end"
+                            style="display: none;" onclick="resendOtp()">Resend OTP</button>
                     </div>
 
                     <button type="submit" id="verify-otp-btn" class="btn btn-primary mb-3 fw-bold text-white"
@@ -69,73 +69,88 @@
         integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
         crossorigin="anonymous"></script>
 
-    <script>
-        const otpInput = document.getElementById('otp');
-        const submitOTP = document.getElementById('verify-otp-btn');
-        const otpError = document.getElementById('otp-error');
-        const otpResendTimer = document.getElementById('otp-resend-timer');
-        const resendOtpButton = document.getElementById('resend-otp-btn');
-        let countdown = 60;
-
-        // Add event listener to OTP verify input
-        otpInput.addEventListener('input', (event) => {
-            const otpValue = event.target.value.replace(/\D/g, ''); // Remove non-numeric characters
-
-
-            // Check if otp number is exactly 6 digits
-            if (otpValue.length === 6) {
-                submitOTP.disabled = false;
-                otpError.style.display = 'none';
-            } else {
-                submitOTP.disabled = true;
-                otpError.style.display = 'block';
-            }
-
-            // Update the OTP input field with only numeric characters
-            event.target.value = otpValue;
-
-        });
-
-
-        // setInterval countdown
-        const interval = setInterval(() => {
-            countdown--;
-            otpResendTimer.textContent = `Resend OTP in: ${countdown} seconds`;
-
-            // When countdown reaches 0, show "Resend OTP" button and stop timer
-            if (countdown <= 0) {
-                clearInterval(interval);
-                otpResendTimer.style.display = 'none'; // Hide the timer text
-                resendOtpButton.style.display = 'block'; // Show the resend button
-            }
-        }, 1000);
-
-
-        // Function to handle "Resend OTP" button click
-        function resendOtp() {
-         
-            alert('OTP has been resent!');
-
-            // Optionally, restart the countdown if needed
-            countdown = 60;
-            otpResendTimer.style.display = 'block';
-            resendOtpButton.style.display = 'none';
-            otpResendTimer.textContent = `Resend OTP in: ${countdown} seconds`;
-
-            // Restart the timer
-            setInterval(() => {
-                countdown--;
-                otpResendTimer.textContent = `Resend OTP in: ${countdown} seconds`;
-
-                if (countdown <= 0) {
-                    clearInterval(interval);
-                    otpResendTimer.style.display = 'none';
-                    resendOtpButton.style.display = 'inline-block';
+        <script>
+            const otpInput = document.getElementById('otp');
+            const submitOTP = document.getElementById('verify-otp-btn');
+            const otpError = document.getElementById('otp-error');
+            const otpResendTimer = document.getElementById('otp-resend-timer');
+            const resendOtpButton = document.getElementById('resend-otp-btn');
+            const phoneNumber = document.getElementById('phone');
+            let countdown = 60;
+            let resendInterval;
+        
+            // Add event listener to OTP verify input
+            otpInput.addEventListener('input', (event) => {
+                const otpValue = event.target.value.replace(/\D/g, ''); // Remove non-numeric characters
+        
+                // Check if otp number is exactly 6 digits
+                if (otpValue.length === 6) {
+                    submitOTP.disabled = false;
+                    otpError.style.display = 'none';
+                } else {
+                    submitOTP.disabled = true;
+                    otpError.style.display = 'block';
                 }
-            }, 1000);
-        }
-
-    </script>
+        
+                // Update the OTP input field with only numeric characters
+                event.target.value = otpValue;
+            });
+        
+            // Function to start the countdown
+            function startCountdown() {
+                countdown = 60;
+                otpResendTimer.style.display = 'block';
+                resendOtpButton.style.display = 'none'; // Hide the resend button
+                otpResendTimer.textContent = `Resend OTP in: ${countdown} seconds`;
+        
+                // Clear any previous interval
+                clearInterval(resendInterval);
+        
+                // Start a new interval
+                resendInterval = setInterval(() => {
+                    countdown--;
+                    otpResendTimer.textContent = `Resend OTP in: ${countdown} seconds`;
+        
+                    if (countdown <= 0) {
+                        clearInterval(resendInterval);
+                        otpResendTimer.style.display = 'none';
+                        resendOtpButton.style.display = 'block'; // Show the resend button
+                    }
+                }, 1000);
+            }
+        
+            // Initial countdown start
+            startCountdown();
+        
+            // Function to handle "Resend OTP" button click
+            function resendOtp() {
+                const phone = phoneNumber.value;
+                console.log("Phone Number:", phone);
+        
+                // Sending an OTP request
+                fetch('/resend-otp', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ phone })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.message) {
+                        alert(data.message); // Display success message
+                    }
+        
+                    // Restart the countdown
+                    startCountdown();
+                })
+                .catch(error => console.error('Error resending OTP:', error));
+            }
+        
+            // Attach the resendOtp function to the button's click event
+            resendOtpButton.addEventListener('click', resendOtp);
+        </script>
+             
 
 </body>
 

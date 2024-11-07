@@ -10,7 +10,7 @@ exports.sendOtpPage = (req, res) => {
 exports.verifyOtpPage = async (req, res) => {
 
     try {
-        const user = await User.findById(req.session.userId); 
+        const user = await User.findById(req.session.userId);
 
         if (user) {
             res.render('auth/verifyOtp', { user });
@@ -42,7 +42,7 @@ exports.sendOtp = async (req, res) => {
         const otpExpires = new Date(Date.now() + 10 * 60000); // OTP expires in 10 minutes
 
         let user = await User.findOne({ phone });
-        
+
 
         if (user) {
             user.otp = otp;
@@ -76,17 +76,17 @@ exports.verifyOtp = async (req, res) => {
 
     try {
         const user = await User.findOne({ phone });
-        
+
         if (!user) {
             req.flash('error', 'User not found');
-            return res.redirect('/verify-otp'); 
+            return res.redirect('/verify-otp');
         }
 
         if (user.otp !== otp) {
             req.flash('error', 'Invalid OTP');
             return res.redirect('/verify-otp');
         }
-        
+
         if (user.otpExpires < Date.now()) {
             req.flash('error', 'OTP expired');
             return res.redirect('/verify-otp');
@@ -105,6 +105,37 @@ exports.verifyOtp = async (req, res) => {
         // res.status(500).json({ message: 'Verification failed', error });
     }
 
+}
+
+// Resend OTP POST
+exports.resendOtp = async (req, res) => {
+    const { phone } = req.body;
+    try {
+        // Find the user by phone number
+        const user = await User.findOne({ phone })
+
+        if (!user) {
+            req.flash('error', 'User not found');
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // Generate a new OTP and expiry time
+        const newOtp = Math.floor(100000 + Math.random() * 900000).toString(); // Generates a 6-digit OTP
+        const otpExpires = Date.now() + 10 * 60 * 1000; // OTP expires in 10 minutes
+
+        // Update the user's OTP and expiry in the database
+        user.otp = newOtp;
+        user.otpExpires = otpExpires;
+        await user.save();
+
+        console.log("Reset User data : ", user)
+        console.log("OTP resent successfully")
+        // res.status(200).json({ message: 'OTP resent successfully' });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error resending OTP', error });
+    }
 }
 
 // Dashboard 
