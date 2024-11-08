@@ -57,7 +57,7 @@ exports.sendOtp = async (req, res) => {
         // Store userId in session
         req.session.userId = user._id;
 
-        req.flash('success', `OTP sent successfully to ${phone}`);
+        // req.flash('success', `OTP sent successfully to ${phone}`);
         console.log("User data : ", user)
 
         res.redirect('/verify-otp')
@@ -74,6 +74,7 @@ exports.verifyOtp = async (req, res) => {
     console.log(req.body)
     const { phone, otp } = req.body;
 
+
     try {
         const user = await User.findOne({ phone });
 
@@ -83,7 +84,7 @@ exports.verifyOtp = async (req, res) => {
         }
 
         if (user.otp !== otp) {
-            req.flash('error', 'Invalid OTP');
+            req.flash('error', 'Invalid OTP! Please try again');
             return res.redirect('/verify-otp');
         }
 
@@ -92,9 +93,9 @@ exports.verifyOtp = async (req, res) => {
             return res.redirect('/verify-otp');
         }
 
+
         user.otp = null;
         user.otpExpires = null;
-
         await user.save();
 
         return res.redirect('/dashboard');
